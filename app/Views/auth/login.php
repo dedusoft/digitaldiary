@@ -37,7 +37,7 @@
                             <div class="text-center text-md-center mb-4 mt-md-0">
                                 <h1 class="mb-0 h3">Sign in to our platform</h1>
                             </div>
-                            <form action="#" class="mt-4">
+                            <form action="<?= base_url()?>dashboard" class="mt-4">
                                 <!-- Form -->
                                 <div class="form-group mb-4">
                                     <label for="email">Your Email</label>
