@@ -9,7 +9,7 @@ export default class NotesView {
         this.root.innerHTML = `
             <div class="notes__sidebar">
                 <div class=notes__add>
-                    <button class="notes__add-btn" type="button">Add Notes</button>
+                    <button class="notes__add-btn" type="button">Add Diary</button>
                 </div>
                 <div class="notes__list"> </div>
             </div>
