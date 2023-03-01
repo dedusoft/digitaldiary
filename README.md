@@ -51,3 +51,37 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - json (enabled by default - don't turn it off)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+
+
+## Installatioin
+
+1 - Clone this project locally using the commmand
+
+```git
+git clone https://github.com/duclairdeugoue/digitaldiary-ci4-app 
+```
+
+2 - Enter inside the project folder and create an empty folder named `cache` inside the folder writable if not exist
+
+3 - Type the commands below to upgrade and install the project packages:
+
+```php
+composer update
+
+composer install 
+```
+
+6 - Create your own branch to 'branch-name' using the command:
+
+```bash
+git checkout -b [branch-name]
+```
+
+
+7 - Finally launch the application using the command
+
+```php
+php spark serve
+```
+
+## Documentation
