@@ -8,17 +8,27 @@ class PageController extends BaseController
 {
     public string $title = 'Welcome';
 
+    /*
+    * --------------------------------------------------------------------
+    * Controller Definitions Of Landing page
+    * --------------------------------------------------------------------
+    */
     /* display the landing page */
     public function index()
     {
         return view('index');
     }
-    
 
+
+    /*
+    * --------------------------------------------------------------------
+    * Controller Definitions Of Authentication Pages
+    * --------------------------------------------------------------------
+    */
     /* display the login page */
     public function login()
     {
-        $this->title = "Login"; 
+        $this->title = "Login";
         $data = [
             'title' => $this->title
         ];
@@ -27,7 +37,7 @@ class PageController extends BaseController
     /* display the registration page */
     public function register()
     {
-        $this->title = "Sign Up"; 
+        $this->title = "Sign Up";
         $data = [
             'title' => $this->title
         ];
@@ -37,7 +47,7 @@ class PageController extends BaseController
     /* display the forget password page */
     public function forgotPassword()
     {
-        $this->title = "Forget password"; 
+        $this->title = "Forget password";
         $data = [
             'title' => $this->title
         ];
@@ -47,7 +57,7 @@ class PageController extends BaseController
     /* display the reset password page */
     public function resetPassword()
     {
-        $this->title = "Reset password"; 
+        $this->title = "Reset password";
         $data = [
             'title' => $this->title
         ];
@@ -57,7 +67,7 @@ class PageController extends BaseController
     /* display the lock screen page */
     public function lockPage()
     {
-        $this->title = "Lock Page"; 
+        $this->title = "Lock Page";
         $data = [
             'title' => $this->title
         ];
@@ -65,12 +75,25 @@ class PageController extends BaseController
     }
 
 
+    /*
+    * --------------------------------------------------------------------
+    * Controller Definitions Of Dary pages
+    * --------------------------------------------------------------------
+    */
     /* display the dashboard landing page page */
-    public function dashboard() {
-         echo view('dashboard');
+    public function dashboard()
+    {
+        echo view('dashboard');
     }
 
-    public function error404() {
-         echo view('errors/html/error_404');
+
+    /*
+    * --------------------------------------------------------------------
+    * Controller Definitions Of Error pages
+    * --------------------------------------------------------------------
+    */
+    public function error404()
+    {
+        echo view('errors/html/error_404');
     }
 }

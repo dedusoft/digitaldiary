@@ -7,7 +7,7 @@
     <!-- <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url()?>img/favicon/favicon-32x32.png"> -->
     <!-- <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url()?>img/favicon/favicon-16x16.png"> -->
     <!-- Header assets (external libraries) -->
-    <?= $this->include('layouts/_header_assets') ?>
+    <?= $this->include('layouts/_auth_header_assets') ?>
 
     <!-- Styles -->
     <?= $this->renderSection('styles') ?>
@@ -22,7 +22,7 @@
 
 
     <!-- Footer assets (external libraries) -->
-    <?= $this->include('layouts/_footer_assets') ?>
+    <?= $this->include('layouts/_auth_footer_assets') ?>
 
     <?= $this->renderSection('scripts') ?>
 </body>

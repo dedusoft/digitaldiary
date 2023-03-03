@@ -52,7 +52,7 @@ $routes->get('dashboard', 'PageController::dashboard');
 
 /*
  * --------------------------------------------------------------------
- * Route Definitions for our REST API
+ * Route Definitions for our DARY REST API
  * --------------------------------------------------------------------
  */
 $routes->group('api', static function ($routes) {
@@ -64,8 +64,8 @@ $routes->group('api', static function ($routes) {
         $routes->post('reset-password', 'AuthController::resetPasword');
     });
 
-    $routes->group('daries', static function ($routes) {
-        // $routes->get('all', 'DairyController::index');
+    $routes->group('dairy', static function ($routes) {
+        $routes->get('all', 'DairyController::index');
     });
 });
 
