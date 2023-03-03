@@ -34,7 +34,11 @@ class PageController extends BaseController
     /* display the forget password page */
     public function forgetPassword()
     {
-        echo view('auth/forget-password');
+        $this->title = "Forget password"; 
+        $data = [
+            'title' => $this->title
+        ];
+        echo view('auth/forget-password', $data);
     }
 
     /* display the reset password page */
