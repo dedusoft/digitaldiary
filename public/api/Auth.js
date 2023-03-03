@@ -1,8 +1,8 @@
 // UI Elements
 const API_URL = "http://localhost:8080/api";
 
-const loginForm = "#loginForm";
-const loginBtn = "#loginBtn";
+const loginForm = "#formLogin";
+const loginBtn = "#btnLogin";
 const email = "#email";
 const password = "#password";
 const errorPassword = "#errorPassword";
@@ -22,29 +22,33 @@ const handlerLogin = () => {
             data: data,
             dataType: "json",
             beforeSend: function () {
-
                 $(loginBtn).text('Validating ...');
                 $(loginBtn).attr('disabled', true);
             },
             success: function (response) {
                 if (response.success) {
-                    location.href = 'http://localhost:8080/dashboard';
+                    toastr.clear()
+                    toastr.success(response.message);
+                    setTimeout(() => {
+                        location.href = 'http://localhost:8080/dashboard';
+                    }, 1000);
                 }
                 if (response.error) {
                     $(loginBtn).text('Login');
                     $(loginBtn).attr('disabled', false);
 
-                    if (response.error_admin_user_name !== '') {
-                        $('#error_admin_user_name').text(response.error_admin_user_name);
+                    if (response.errorEmail !== '') {
+                        toastr.error(response.errorEmail);
+
                     } else {
-                        $('#error_admin_user_name').text('');
+                        $(errorEmail).text('');
                     }
 
-                    if (response.error_lecturer_password !== '') {
-                        $('#error_admin_password').text(response.error_admin_password);
+                    if (response.errorPassword !== '') {
+                        toastr.error(response.errorPassword);
                     }
                     else {
-                        $('#error_admin_password').text('');
+                        $(errorPassword).text('');
                     }
                 }
             }

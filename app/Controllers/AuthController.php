@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\UserModel;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -9,25 +10,68 @@ class AuthController extends ResourceController
 {
     public string $email = '';
     public string $password = '';
-    public string $confirmPassword = '';
     public string $remember = '';
-    public int $error = 0;
+
+    public string $errorEmail = '';
+    public string $confirmPassword = '';
+    public string $errorPassword = '';
+    public int $errors = 0;
 
     use ResponseTrait;
     public function login()
     {
+        $userModel = new UserModel();
+
         $emailTest = 'duclairdeugoue@gmail.com';
         $passwordTest = '12345678';
 
-        $this->email = $this->request->getVar('email');
-        $this->password = $this->request->getVar('password');
+        $emailInput = $this->request->getVar('email');
+        $passwordInput = $this->request->getVar('password');
 
-        $data = [
-            "email" => $this->request->getVar('email'),
-            "password" => $this->request->getVar('password')
-        ];
+        if (empty($emailInput)) {
+            $this->errorEmail = 'Email is required';
+            $this->errors++;
+        } else {
+            $this->email = $emailInput;
+        }
 
-        return $this->respond($data, 200);
+        if (empty($passwordInput)) {
+            $this->errorPassword = 'Password is required';
+            $this->errors++;
+        } else {
+            $this->password = $passwordInput;
+        }
+
+        if ($this->errors == 0) {
+            if ($this->email !== $emailTest) {
+                $this->errorPassword = 'Wrong Email or Password';
+                $this->errors++;
+            }
+            if ($this->password !== $passwordTest) {
+                $this->errorPassword = 'Wrong Email or Password';
+                $this->errors++;
+            }
+        }
+
+        if ($this->errors != 0) {
+            $output = array(
+                'error'   => true,
+                'errorEmail' => $this->errorEmail,
+                'errorPassword'  => $this->errorPassword
+            );
+
+            return $this->respond($output, 200);
+        }
+
+        if($this->errors == 0) {
+            $output = array(
+                'success'   => true,
+                'message'   => 'Login successfully'
+            );
+
+            return $this->respond($output, 200);
+        }
+        
     }
 
     public function register()

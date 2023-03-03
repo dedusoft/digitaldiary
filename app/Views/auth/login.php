@@ -27,7 +27,7 @@
                         <h1 class="mb-0 h3">Sign in to our platform</h1>
                     </div>
                     <!-- action="<?= base_url() ?>dashboard" -->
-                    <form id="loginForm" method="POST" class="mt-4">
+                    <form id="formLogin" method="POST" class="mt-4">
                         <!-- Form -->
                         <div class="form-group mb-4">
                             <label for="email">Your Email</label>
@@ -40,8 +40,6 @@
                                 </span>
                                 <input type="email" class="form-control" placeholder="example@company.com" id="email" autofocus>
                             </div>
-                            <span id="errorEmail" class="text-danger"></span>
-
 
                         </div>
                         <!-- End of Form -->
@@ -56,9 +54,9 @@
                                         </svg>
                                     </span>
                                     <input type="password" placeholder="Password" class="form-control" id="password">
-                                    <span id="errorPassword" class="text-danger"></span>
 
                                 </div>
+
                             </div>
                             <!-- End of Form -->
                             <div class="d-flex justify-content-between align-items-top mb-4">
@@ -72,7 +70,7 @@
                             </div>
                         </div>
                         <div class="d-grid">
-                            <button type="submit" id="loginBtn" class="btn btn-gray-800">Sign in</button>
+                            <button type="submit" id="btnLogin" class="btn btn-gray-800">Sign in</button>
                         </div>
                     </form>
                     <div class="mt-3 mb-4 text-center">
@@ -110,5 +108,8 @@
 
 
 <?= $this->section('scripts') ?>
+
+
 <script src="<?= base_url() ?>api/Auth.js"></script>
+
 <?= $this->endSection()  ?>

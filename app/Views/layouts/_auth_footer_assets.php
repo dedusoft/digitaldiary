@@ -37,4 +37,6 @@
 <!-- Volt JS -->
 <script src="<?= base_url(); ?>js/volt.js"></script>
 
+<!-- Toastr -->
+<script src="<?= base_url(); ?>assets/toastr/toastr.min.js"></script>
 
