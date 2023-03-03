@@ -35,23 +35,23 @@ class PageController extends BaseController
     }
 
     /* display the forget password page */
-    public function forgetPassword()
+    public function forgotPassword()
     {
         $this->title = "Forget password"; 
         $data = [
             'title' => $this->title
         ];
-        echo view('auth/forget-password', $data);
+        echo view('auth/forgot-password', $data);
     }
 
     /* display the reset password page */
     public function resetPassword()
     {
-        $this->title = "Forget password"; 
+        $this->title = "Reset password"; 
         $data = [
             'title' => $this->title
         ];
-        echo view('auth/forget-password', $data);
+        echo view('auth/reset-password', $data);
     }
 
     /* display the lock screen page */

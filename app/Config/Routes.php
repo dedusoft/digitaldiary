@@ -38,18 +38,15 @@ $routes->set404Override();
 
 $routes->get('/', 'PageController::index');
 
-$routes->group('auth', static function($routes) {
+$routes->group('auth', static function ($routes) {
     $routes->get('login', 'PageController::login');
-    $routes->get('forget-password', 'PageController::forgetPassword');
+    $routes->get('forgot-password', 'PageController::forgotPassword');
     $routes->get('lock-page', 'PageController::lockPage');
     $routes->get('register', 'PageController::register');
-    $routes->get('reset-password', 'PageController::resetPasword');
+    $routes->get('reset-password', 'PageController::resetPassword');
 });
 
-$routes->group('dashboard', static function($routes) {
-    $routes->get('/', 'PageController::dashboard');
-});
-
+$routes->get('dashboard', 'PageController::dashboard');
 
 
 
@@ -58,8 +55,8 @@ $routes->group('dashboard', static function($routes) {
  * Route Definitions for our REST API
  * --------------------------------------------------------------------
  */
-$routes->group('api', static function($routes) {
-    $routes->group('auth', static function($routes) {
+$routes->group('api', static function ($routes) {
+    $routes->group('auth', static function ($routes) {
         $routes->post('login', 'AuthController::login');
         $routes->post('forget-password', 'AuthController::forgetPassword');
         $routes->post('lock-page', 'AuthController::lockPage');
@@ -67,11 +64,9 @@ $routes->group('api', static function($routes) {
         $routes->post('reset-password', 'AuthController::resetPasword');
     });
 
-    $routes->group('daries', static function($routes) {
+    $routes->group('daries', static function ($routes) {
         // $routes->get('all', 'DairyController::index');
     });
-
-   
 });
 
 

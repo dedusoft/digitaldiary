@@ -62,7 +62,7 @@
                                         Remember me
                                     </label>
                                 </div>
-                                <div><a href="./forgot-password.html" class="small text-right">Lost password?</a></div>
+                                <div><a href="<?= base_url()?>auth/forgot-password" class="small text-right">Lost password?</a></div>
                             </div>
                         </div>
                         <div class="d-grid">
