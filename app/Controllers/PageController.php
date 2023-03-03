@@ -11,7 +11,6 @@ class PageController extends BaseController
     /* display the landing page */
     public function index()
     {
-        
         return view('index');
     }
     
@@ -28,7 +27,11 @@ class PageController extends BaseController
     /* display the registration page */
     public function register()
     {
-        echo view('auth/register');
+        $this->title = "Forget password"; 
+        $data = [
+            'title' => $this->title
+        ];
+        echo view('auth/register', $data);
     }
 
     /* display the forget password page */
@@ -44,13 +47,21 @@ class PageController extends BaseController
     /* display the reset password page */
     public function resetPassword()
     {
-        echo view('auth/forget-password');
+        $this->title = "Forget password"; 
+        $data = [
+            'title' => $this->title
+        ];
+        echo view('auth/forget-password', $data);
     }
 
     /* display the lock screen page */
     public function lockPage()
     {
-        echo view('auth/forget-password');
+        $this->title = "Lock Page"; 
+        $data = [
+            'title' => $this->title
+        ];
+        echo view('auth/lock-page', $data);
     }
 
 
