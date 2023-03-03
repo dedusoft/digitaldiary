@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/auth') ?>
+<?= $this->extend('layouts/[layout]') ?>
 <?= $this->section('styles') ?>
 <style>
 

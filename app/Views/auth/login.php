@@ -39,6 +39,7 @@
                                 </span>
                                 <input type="email" class="form-control" placeholder="example@company.com" id="email" autofocus required>
                             </div>
+                            
                         </div>
                         <!-- End of Form -->
                         <div class="form-group">
