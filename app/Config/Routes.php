@@ -29,19 +29,35 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
 
+// Routes for displaying the pages pages
+$routes->get('/', 'PageController::index');
 $routes->group('auth', static function($routes) {
-    $routes->get('login', 'AuthController::login');
-    $routes->get('forget-password', 'AuthController::forgetPassword');
-    $routes->get('lock-page', 'AuthController::lockPage');
-    $routes->get('register', 'AuthController::register');
-    $routes->get('reset-password', 'AuthController::resetPasword');
+    $routes->get('login', 'PageController::login');
+    $routes->get('forget-password', 'PageController::forgetPassword');
+    $routes->get('lock-page', 'PageController::lockPage');
+    $routes->get('register', 'PageController::register');
+    $routes->get('reset-password', 'PageController::resetPasword');
+});
+
+$routes->get('/dashboard', 'PageController::index');
+
+
+// Routes for the REST API
+$routes->group('api', static function($routes) {
+    $routes->group('auth', static function($routes) {
+        $routes->post('login', 'AuthController::login');
+        $routes->post('forget-password', 'AuthController::forgetPassword');
+        $routes->post('lock-page', 'AuthController::lockPage');
+        $routes->post('register', 'AuthController::register');
+        $routes->post('reset-password', 'AuthController::resetPasword');
+    });
+
+   
 });
 
 
 
-$routes->get('/dashboard', 'DashboardController::index');
 
 /*
  * --------------------------------------------------------------------
