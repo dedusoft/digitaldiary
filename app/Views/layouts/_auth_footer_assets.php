@@ -1,4 +1,7 @@
 <!-- Core -->
+
+<script src="<?= base_url(); ?>assets/jquery/jQuery-3.5.1.min.js"></script>
+<script src="<?= base_url(); ?>assets/jquery.easing/jquery.easing.min.js"></script>
 <script src="<?= base_url(); ?>assets/@popperjs/core/dist/umd/popper.min.js"></script>
 <script src="<?= base_url(); ?>assets/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="<?= base_url(); ?>assets/onscreen/dist/on-screen.umd.min.js"></script>
@@ -30,8 +33,6 @@
 
 <!-- Simplebar -->
 <script src="<?= base_url(); ?>assets/simplebar/dist/simplebar.min.js"></script>
-
-
 
 <!-- Volt JS -->
 <script src="<?= base_url(); ?>js/volt.js"></script>

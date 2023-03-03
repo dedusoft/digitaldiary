@@ -2,13 +2,32 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
+use CodeIgniter\API\ResponseTrait;
+use CodeIgniter\RESTful\ResourceController;
 
-class AuthController extends BaseController
+class AuthController extends ResourceController
 {
+    public string $email = '';
+    public string $password = '';
+    public string $confirmPassword = '';
+    public string $remember = '';
+    public int $error = 0;
+
+    use ResponseTrait;
     public function login()
     {
-        echo view('auth/login');
+        $emailTest = 'duclairdeugoue@gmail.com';
+        $passwordTest = '12345678';
+
+        $this->email = $this->request->getVar('email');
+        $this->password = $this->request->getVar('password');
+
+        $data = [
+            "email" => $this->request->getVar('email'),
+            "password" => $this->request->getVar('password')
+        ];
+
+        return $this->respond($data, 200);
     }
 
     public function register()
