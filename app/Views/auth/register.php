@@ -22,7 +22,7 @@
                     <div class="text-center text-md-center mb-4 mt-md-0">
                         <h1 class="mb-0 h3">Create Account </h1>
                     </div>
-                    <form action="#" class="mt-4">
+                    <form id="formRegistration" class="mt-4">
                         <!-- Form -->
                         <div class="form-group mb-4">
                             <label for="email">Your Email</label>
@@ -60,7 +60,7 @@
                                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                                         </svg>
                                     </span>
-                                    <input type="password" placeholder="Confirm Password" class="form-control" id="confirm_password" required>
+                                    <input type="password" placeholder="Confirm Password" class="form-control" id="passwordConfirm" required>
                                 </div>
                             </div>
                             <!-- End of Form -->
@@ -112,8 +112,6 @@
 
 
 <?= $this->section('scripts') ?>
-<script>
-
-</script>
+<script src="<?= base_url() ?>api/Auth.js"></script>
 <?= $this->endSection()  ?>
 

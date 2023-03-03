@@ -108,8 +108,6 @@
 
 
 <?= $this->section('scripts') ?>
-
-
 <script src="<?= base_url() ?>api/Auth.js"></script>
 
 <?= $this->endSection()  ?>

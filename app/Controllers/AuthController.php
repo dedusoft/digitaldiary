@@ -11,16 +11,17 @@ class AuthController extends ResourceController
     public string $email = '';
     public string $password = '';
     public string $remember = '';
+    public string $confirmPassword = '';
 
     public string $errorEmail = '';
-    public string $confirmPassword = '';
     public string $errorPassword = '';
+    public string $errorConfirmPassword = '';
     public int $errors = 0;
 
     use ResponseTrait;
     public function login()
     {
-        $userModel = new UserModel();
+        // $userModel = new UserModel();
 
         $emailTest = 'duclairdeugoue@gmail.com';
         $passwordTest = '12345678';
@@ -53,14 +54,13 @@ class AuthController extends ResourceController
             }
         }
 
-        if ($this->errors != 0) {
+        if ($this->errors > 0) {
             $output = array(
                 'error'   => true,
                 'errorEmail' => $this->errorEmail,
                 'errorPassword'  => $this->errorPassword
             );
 
-            return $this->respond($output, 200);
         }
 
         if($this->errors == 0) {
@@ -69,16 +69,20 @@ class AuthController extends ResourceController
                 'message'   => 'Login successfully'
             );
 
-            return $this->respond($output, 200);
         }
-        
+        return $this->respond($output, 200);
+
     }
 
+    use ResponseTrait;
     public function register()
     {
-        echo view('auth/register');
+        return $this->respond([
+            "test" => "Testing"
+        ]);
     }
 
+    use ResponseTrait;
     public function forgetPassword()
     {
         echo view('auth/forget-password');
