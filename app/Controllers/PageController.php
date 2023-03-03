@@ -6,9 +6,12 @@ use App\Controllers\BaseController;
 
 class PageController extends BaseController
 {
+    public string $title = 'Welcome';
+
     /* display the landing page */
     public function index()
     {
+        
         return view('index');
     }
     
@@ -16,7 +19,11 @@ class PageController extends BaseController
     /* display the login page */
     public function login()
     {
-        echo view('auth/login');
+        $this->title = "Login"; 
+        $data = [
+            'title' => $this->title
+        ];
+        echo view('auth/login', $data);
     }
     /* display the registration page */
     public function register()
