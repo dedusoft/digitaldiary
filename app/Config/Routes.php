@@ -67,6 +67,10 @@ $routes->group('api', static function($routes) {
         $routes->post('reset-password', 'AuthController::resetPasword');
     });
 
+    $routes->group('daries', static function($routes) {
+        // $routes->get('all', 'DairyController::index');
+    });
+
    
 });
 
