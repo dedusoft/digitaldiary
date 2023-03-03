@@ -56,6 +56,6 @@ class PageController extends BaseController
 
     /* display the dashboard landing page page */
     public function dashboard() {
-         echo view('dashboard/index');
+         echo view('dashboard');
     }
 }
