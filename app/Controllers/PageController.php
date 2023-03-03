@@ -69,4 +69,8 @@ class PageController extends BaseController
     public function dashboard() {
          echo view('dashboard');
     }
+
+    public function error404() {
+         echo view('errors/html/error_404');
+    }
 }
