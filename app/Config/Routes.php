@@ -11,7 +11,7 @@ $routes = Services::routes();
  * --------------------------------------------------------------------
  */
 $routes->setDefaultNamespace('App\Controllers');
-$routes->setDefaultController('Home');
+$routes->setDefaultController('PageController');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
@@ -30,8 +30,14 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 
-// Routes for displaying the pages pages
+/*
+ * --------------------------------------------------------------------
+ * Route Definitions for rendering the pages
+ * --------------------------------------------------------------------
+ */
+
 $routes->get('/', 'PageController::index');
+
 $routes->group('auth', static function($routes) {
     $routes->get('login', 'PageController::login');
     $routes->get('forget-password', 'PageController::forgetPassword');
@@ -43,7 +49,13 @@ $routes->group('auth', static function($routes) {
 $routes->get('/dashboard', 'PageController::index');
 
 
-// Routes for the REST API
+
+
+/*
+ * --------------------------------------------------------------------
+ * Route Definitions for our REST API
+ * --------------------------------------------------------------------
+ */
 $routes->group('api', static function($routes) {
     $routes->group('auth', static function($routes) {
         $routes->post('login', 'AuthController::login');
