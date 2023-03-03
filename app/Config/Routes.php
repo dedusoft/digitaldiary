@@ -46,7 +46,9 @@ $routes->group('auth', static function($routes) {
     $routes->get('reset-password', 'PageController::resetPasword');
 });
 
-$routes->get('/dashboard', 'PageController::index');
+$routes->group('dashboard', static function($routes) {
+    $routes->get('/', 'PageController::dashboard');
+});
 
 
 

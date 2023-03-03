@@ -17,7 +17,7 @@ class PageController extends BaseController
         return view('auth/login');
     }
 
-    public function home() {
+    public function dashboard() {
          echo view('dashboard/index');
     }
 }
