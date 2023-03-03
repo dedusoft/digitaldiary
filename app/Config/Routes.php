@@ -37,13 +37,19 @@ $routes->set404Override('App\Controllers\PageController::error404');
  */
 
 $routes->get('/', 'PageController::index');
+$routes->get('lock-page', 'PageController::lockPage');
 
 $routes->group('auth', static function ($routes) {
     $routes->get('login', 'PageController::login');
-    $routes->get('forgot-password', 'PageController::forgotPassword');
-    $routes->get('lock-page', 'PageController::lockPage');
-    $routes->get('register', 'PageController::register');
+    $routes->get('logout', 'PageController::logout');
+    
+});
+
+$routes->group('user', static function($routes) {
+    $routes->get('create', 'PageController::register');
     $routes->get('reset-password', 'PageController::resetPassword');
+    $routes->get('forgot-password', 'PageController::forgotPassword');
+
 });
 
 $routes->get('dashboard', 'PageController::dashboard');
@@ -52,16 +58,20 @@ $routes->get('dashboard', 'PageController::dashboard');
 
 /*
  * --------------------------------------------------------------------
- * Route Definitions for our DARY REST API
+ * Route Definitions for our REST API
  * --------------------------------------------------------------------
  */
 $routes->group('api', static function ($routes) {
     $routes->group('auth', static function ($routes) {
-        $routes->post('login', 'AuthController::login');
-        $routes->post('forget-password', 'AuthController::forgetPassword');
-        $routes->post('lock-page', 'AuthController::lockPage');
-        $routes->post('register', 'AuthController::register');
-        $routes->post('reset-password', 'AuthController::resetPasword');
+        $routes->post('login', 'AuthAPIController::login');
+        $routes->post('forget-password', 'UserAPIController::forgetPassword');
+        $routes->post('lock-page', 'AuthAPIController::lockPage');
+        $routes->post('reset-password', 'AuthAPIController::resetPasword');
+    });
+
+    $routes->group('user', static function($routes) {
+        $routes->post('create', 'AuthAPIController::register');
+
     });
 
     $routes->group('dairy', static function ($routes) {

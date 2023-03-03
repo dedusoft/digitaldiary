@@ -61,7 +61,7 @@
                             <!-- End of Form -->
                             <div class="d-flex justify-content-between align-items-top mb-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="remember" id="remember">
+                                    <input class="form-check-input" type="checkbox" value="" id="remember">
                                     <label class="form-check-label mb-0" for="remember">
                                         Remember me
                                     </label>
@@ -108,6 +108,6 @@
 
 
 <?= $this->section('scripts') ?>
-<script src="<?= base_url() ?>api/Auth.js"></script>
+<script src="<?= base_url() ?>api/authAPI.js"></script>
 
 <?= $this->endSection()  ?>

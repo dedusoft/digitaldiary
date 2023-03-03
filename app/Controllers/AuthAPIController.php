@@ -6,7 +6,7 @@ use App\Models\UserModel;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
 
-class AuthController extends ResourceController
+class AuthAPIController extends ResourceController
 {
     public string $email = '';
     public string $password = '';
@@ -77,6 +77,7 @@ class AuthController extends ResourceController
     use ResponseTrait;
     public function register()
     {
+        
         return $this->respond([
             "test" => "Testing"
         ]);

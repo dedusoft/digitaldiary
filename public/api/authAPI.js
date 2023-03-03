@@ -1,4 +1,10 @@
-// UI Elements
+$(document).ready(function () {
+
+    handlerUserLogin();
+    handlerCreateUser();
+
+});
+
 const API_URL = "http://localhost:8080/api";
 
 // FORMS
@@ -13,13 +19,18 @@ const email = "#email";
 const password = "#password";
 const passwordConfirm = "#passwordConfirm";
 
+const remember = "#remember";
+const termsAndCondition = "#termsAndCondition";
 
-const handlerLogin = () => {
+
+
+const handlerUserLogin = () => {
     $(formLogin).on('submit', (e) => {
         e.preventDefault();
         data = {
             'email': $(email).val(),
             'password': $(password).val(),
+            'remember': $(remember).val(),
         };
         $.ajax({
             url: `${API_URL}/auth/login`,
@@ -56,16 +67,17 @@ const handlerLogin = () => {
     });
 }
 
-
-const handlerRegistration = () => {
-    $(formLogin).on('submit', (e) => {
+const handlerCreateUser = () => {
+    $(formRegistration).on('submit', (e) => {
         e.preventDefault();
         data = {
             'email': $(email).val(),
             'password': $(password).val(),
+            'passwordConfirm': $(passwordConfirm).val(),
+            'termsAndCondition': $(termsAndCondition).checked(),
         };
         $.ajax({
-            url: `${API_URL}/auth/login`,
+            url: `${API_URL}/auth/register`,
             type: "post",
             data: data,
             dataType: "json",
@@ -74,30 +86,12 @@ const handlerRegistration = () => {
                 $(btnLogin).attr('disabled', true);
             },
             success: function (response) {
+                console.log(response);
                 if (response.success) {
-                    toastr.clear()
-                    toastr.success(response.message);
-                    setTimeout(() => {
-                        location.href = 'http://localhost:8080/dashboard';
-                    }, 1000);
+                    
                 }
                 if (response.error) {
-                    $(btnLogin).text('Login');
-                    $(btnLogin).attr('disabled', false);
-
-                    if (response.errorEmail !== '') {
-                        toastr.error(response.errorEmail);
-
-                    } else {
-                        $(errorEmail).text('');
-                    }
-
-                    if (response.errorPassword !== '') {
-                        toastr.error(response.errorPassword);
-                    }
-                    else {
-                        $(errorPassword).text('');
-                    }
+                    
                 }
             }
         });
@@ -107,9 +101,5 @@ const handlerRegistration = () => {
 
 
 
-$(document).ready(function () {
 
-    handlerLogin();
-    // handlerRegistration();
 
-});

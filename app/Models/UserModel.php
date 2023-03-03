@@ -18,14 +18,14 @@ class UserModel extends Model
         'user_email',
         'user_password',
         'user_role',
-        'remember'
+        'user_remember'
     ];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
+    protected $createdField  = 'user_created_at';
+    protected $updatedField  = 'user_updated_at';
+    protected $deletedField  = 'user_deleted_at';
 
 }
