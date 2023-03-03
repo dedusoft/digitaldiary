@@ -27,7 +27,7 @@ class PageController extends BaseController
     /* display the registration page */
     public function register()
     {
-        $this->title = "Forget password"; 
+        $this->title = "Sign Up"; 
         $data = [
             'title' => $this->title
         ];
