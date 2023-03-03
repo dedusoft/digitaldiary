@@ -23,6 +23,7 @@
         <?= $this->renderSection('content') ?>
     </main>
 
+    <?= $this->include('layouts/_main_footer') ?>
 
     <!-- Footer assets (external libraries) -->
     <?= $this->include('layouts/_main_footer_assets') ?>
