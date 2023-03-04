@@ -34,7 +34,7 @@ class PageController extends BaseController
         ];
         echo view('auth/login', $data);
     }
-    /* display the registration page */
+    /* display the user registration page */
     public function register()
     {
         $this->title = "Sign Up";

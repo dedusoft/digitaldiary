@@ -10,12 +10,16 @@ class AuthAPIController extends ResourceController
 {
     public string $email = '';
     public string $password = '';
-    public string $remember = '';
-    public string $confirmPassword = '';
+    public string $userRole = 'customer';
+    public bool $remember = false;
+    public string $passwordConfirm = '';
+    public string $termsAndConditions = '';
 
     public string $errorEmail = '';
     public string $errorPassword = '';
-    public string $errorConfirmPassword = '';
+    public string $errorPasswordConfirm = '';
+    public string $errorPasswordMatch = '';
+    public string $errorTermsAndConditions = '';
     public int $errors = 0;
 
     use ResponseTrait;
@@ -77,10 +81,60 @@ class AuthAPIController extends ResourceController
     use ResponseTrait;
     public function register()
     {
+        $emailInput = $this->request->getVar('email');
+        $passwordInput = $this->request->getVar('password');
+        $passwordConfirmInput = $this->request->getVar('passwordConfirm');
+        $termsAndConditionsInput = $this->request->getVar('termsAndConditions');
+
+        if (empty($emailInput)) {
+            $this->errorEmail = 'Email is required';
+            $this->errors++;
+        } else {
+            $this->email = $emailInput;
+        }
+
+        if (empty($passwordInput)) {
+            $this->errorPassword = 'Password is required';
+            $this->errors++;
+        } else {
+            $this->password = $passwordInput;
+        }
+
+        if (empty($passwordConfirmInput)) {
+            $this->errorPasswordConfirm = 'Confirm Password is required';
+            $this->errors++;
+        } else {
+            $this->passwordConfirm = $passwordInput;
+        }
+
+        if ($termsAndConditionsInput === 'false') {
+            $this->errorTermsAndConditions = 'Terms and Conditions  is required';
+            $this->errors++;
+        } else {
+            $this->termsAndConditions = $termsAndConditionsInput;
+        }
+
+        if($this->errors != 0) {
+            $output = array(
+                'error'   => true,
+                'message'   => 'All fields are required',
+                'errorEmail' => $this->errorEmail,
+                'errorPassword'  => $this->errorPassword,
+                'errorPasswordConfirm'  => $this->errorPasswordConfirm,
+                'errorTermsAndConditions'  => $this->errorTermsAndConditions,
+                'termAndCondition' => $this->termsAndConditions
+            );
+        }
+
+        if($this->errors == 0) {
+            $output = array(
+                'success'   => true,
+                'message'   => "All validation are successful"
+            );
+            
+        }
         
-        return $this->respond([
-            "test" => "Testing"
-        ]);
+        return $this->respond($output, 200);
     }
 
     use ResponseTrait;

@@ -39,5 +39,3 @@
 
 <!-- Toastr -->
 <script src="<?= base_url(); ?>assets/toastr/toastr.min.js"></script>
-
-<script src="<?= base_url(); ?>api/config.js"></script>

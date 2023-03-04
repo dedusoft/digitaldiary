@@ -33,7 +33,7 @@
                                         <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                                     </svg>
                                 </span>
-                                <input type="email" class="form-control" placeholder="example@company.com" id="email" autofocus >
+                                <input type="email" class="form-control" placeholder="example@company.com" id="email" autofocus>
                             </div>
                         </div>
                         <!-- End of Form -->
@@ -47,7 +47,7 @@
                                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                                         </svg>
                                     </span>
-                                    <input type="password" placeholder="Password" class="form-control" id="password" >
+                                    <input type="password" placeholder="Password" class="form-control" id="password">
                                 </div>
                             </div>
                             <!-- End of Form -->
@@ -60,21 +60,21 @@
                                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                                         </svg>
                                     </span>
-                                    <input type="password" placeholder="Confirm Password" class="form-control" id="passwordConfirm" >
+                                    <input type="password" placeholder="Confirm Password" class="form-control" id="passwordConfirm">
                                 </div>
                             </div>
                             <!-- End of Form -->
                             <div class="mb-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" unchecked id="termsAndCondition">
-                                    <label class="form-check-label fw-normal mb-0" for="termsAndCondition">
+                                    <input class="form-check-input" type="checkbox" id="termsAndConditions">
+                                    <label class="form-check-label fw-normal mb-0" for="termsAndConditions">
                                         I agree to the <a href="#" class="fw-bold">terms and conditions</a>
                                     </label>
                                 </div>
                             </div>
                         </div>
                         <div class="d-grid">
-                            <button type="submit"  id="btnRegister" class="btn btn-gray-800">Sign up</button>
+                            <button type="submit" id="btnRegister" class="btn btn-gray-800">Sign up</button>
                         </div>
                     </form>
                     <div class="mt-3 mb-4 text-center">
@@ -110,8 +110,57 @@
 </section>
 <?= $this->endSection() ?>
 
-
 <?= $this->section('scripts') ?>
-<script src="<?= base_url() ?>api/userAPI.js"></script>
-<?= $this->endSection()  ?>
+<script>
+    $(document).ready(function() {
+        handlerUserRegistration();
 
+    });
+    // API URL
+    const API_URL = "<?= base_url(); ?>api/auth/register";
+
+    const formRegistration = "#formRegistration";
+    const btnRegister = "#btnRegister";
+    const email = "#email";
+    const password = "#password";
+    const passwordConfirm = "#passwordConfirm";
+    const termsAndConditions = "#termsAndConditions";
+
+
+    const handlerUserRegistration = () => {
+        $(formRegistration).on('submit', (e) => {
+            e.preventDefault();
+            let termsAndConditionsInput = $(termsAndConditions)[0].checked ? 'true' : 'false'
+            data = {
+                'email': $(email).val(),
+                'password': $(password).val(),
+                'passwordConfirm': $(passwordConfirm).val(),
+                'termsAndConditions': termsAndConditionsInput,
+            };
+            $.ajax({
+                url: API_URL,
+                type: "post",
+                data: data,
+                dataType: "json",
+                beforeSend: function() {
+                    $(btnRegister).text('Validating ...');
+                    $(btnRegister).attr('disabled', true);
+                },
+                success: function(response) {
+
+                    if (response.success) {
+                        toastr.info(response.message);
+
+                    }
+                    if (response.error) {
+                        $(btnRegister).text('Sign Up');
+                        $(btnRegister).attr('disabled', false);
+                        toastr.error(response.message);
+                    }
+                }
+            });
+
+        });
+    }
+</script>
+<?= $this->endSection()  ?>

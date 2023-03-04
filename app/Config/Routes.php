@@ -37,19 +37,14 @@ $routes->set404Override('App\Controllers\PageController::error404');
  */
 
 $routes->get('/', 'PageController::index');
-$routes->get('lock-page', 'PageController::lockPage');
 
 $routes->group('auth', static function ($routes) {
     $routes->get('login', 'PageController::login');
     $routes->get('logout', 'PageController::logout');
-    
-});
-
-$routes->group('user', static function($routes) {
-    $routes->get('create', 'PageController::register');
-    $routes->get('reset-password', 'PageController::resetPassword');
+    $routes->get('register', 'PageController::register');
+    $routes->get('lock-page', 'PageController::lockPage');
     $routes->get('forgot-password', 'PageController::forgotPassword');
-
+    $routes->get('reset-password', 'PageController::resetPassword');
 });
 
 $routes->get('dashboard', 'PageController::dashboard');
@@ -64,14 +59,9 @@ $routes->get('dashboard', 'PageController::dashboard');
 $routes->group('api', static function ($routes) {
     $routes->group('auth', static function ($routes) {
         $routes->post('login', 'AuthAPIController::login');
-        $routes->post('forget-password', 'UserAPIController::forgetPassword');
-        $routes->post('lock-page', 'AuthAPIController::lockPage');
+        $routes->post('register', 'AuthAPIController::register');
+        $routes->post('forget-password', 'AuthAPIController::forgetPassword');
         $routes->post('reset-password', 'AuthAPIController::resetPasword');
-    });
-
-    $routes->group('user', static function($routes) {
-        $routes->post('create', 'AuthAPIController::register');
-
     });
 
     $routes->group('dairy', static function ($routes) {

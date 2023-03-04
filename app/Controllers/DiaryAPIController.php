@@ -2,10 +2,9 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
 
-class UserAPIController extends ResourceController
+class DiaryAPIController extends ResourceController
 {
     /**
      * Return an array of resource objects, themselves in array format
@@ -27,18 +26,24 @@ class UserAPIController extends ResourceController
         //
     }
 
+    /**
+     * Return a new resource object, with default properties
+     *
+     * @return mixed
+     */
+    public function new()
+    {
+        //
+    }
 
     /**
      * Create a new resource object, from "posted" parameters
      *
      * @return mixed
      */
-    use ResponseTrait;
     public function create()
     {
-        return $this->respond([
-            "test" => "Testing"
-        ]);
+        //
     }
 
     /**

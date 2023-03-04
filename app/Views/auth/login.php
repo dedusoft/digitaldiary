@@ -61,7 +61,7 @@
                             <!-- End of Form -->
                             <div class="d-flex justify-content-between align-items-top mb-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="remember">
+                                    <input class="form-check-input" type="checkbox" id="remember">
                                     <label class="form-check-label mb-0" for="remember">
                                         Remember me
                                     </label>
@@ -108,6 +108,64 @@
 
 
 <?= $this->section('scripts') ?>
-<script src="<?= base_url() ?>api/authAPI.js"></script>
+<script>
+    $(document).ready(function() {
 
+        handlerUserLogin();
+
+    });
+
+    // API URL
+    const API_URL = "<?= base_url(); ?>api/auth/login";
+
+    const formLogin = "#formLogin";
+    const btnLogin = "#btnLogin";
+    const email = "#email";
+    const password = "#password";
+    const remember = "#remember";
+
+
+    const handlerUserLogin = () => {
+        $(formLogin).on('submit', (e) => {
+            e.preventDefault();
+            data = {
+                'email': $(email).val(),
+                'password': $(password).val(),
+                'remember': $(remember)[0].checked,
+            };
+            $.ajax({
+                url: API_URL,
+                type: "post",
+                data: data,
+                dataType: "json",
+                beforeSend: function() {
+                    $(btnLogin).text('Validating ...');
+                    $(btnLogin).attr('disabled', true);
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        setTimeout(() => {
+                            location.href = '<?= base_url()?>dashboard';
+                        }, 1000);
+                    }
+                    if (response.error) {
+                        $(btnLogin).text('Login');
+                        $(btnLogin).attr('disabled', false);
+
+                        if (response.errorEmail !== '') {
+                            toastr.error(response.errorEmail);
+
+                        }
+
+                        if (response.errorPassword !== '') {
+                            toastr.error(response.errorPassword);
+                        }
+                    }
+                }
+            });
+
+        });
+    }
+</script>
 <?= $this->endSection()  ?>
