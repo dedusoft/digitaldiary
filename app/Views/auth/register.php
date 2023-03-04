@@ -23,6 +23,7 @@
                         <h1 class="mb-0 h3">Create Account </h1>
                     </div>
                     <form id="formRegistration" method="post" class="mt-4">
+                        <?= csrf_field()?>
                         <!-- Form -->
                         <div class="form-group mb-4">
                             <label for="email">Your Email</label>

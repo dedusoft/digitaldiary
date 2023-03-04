@@ -11,7 +11,7 @@ class AuthAPIController extends ResourceController
     public string $email = '';
     public string $password = '';
     public string $userRole = 'customer';
-    public bool $remember = false;
+    public string $remember = '';
     public string $passwordConfirm = '';
     public string $termsAndConditions = '';
 
