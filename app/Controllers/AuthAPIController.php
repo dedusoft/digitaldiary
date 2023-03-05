@@ -82,32 +82,45 @@ class AuthAPIController extends ResourceController
         // all fields are filled
         if ($this->errors == 0) {
 
-            if ($this->email !== $emailTest) {
-                $this->status = false;
-                $this->errorEmailOrPasswordMsg = 'Wrong Email or Password';
-                $this->errors++;
-                $this->data['errorEmailOrPassword'] = [
-                    'status'    => true,
-                    'message'   => $this->errorEmailOrPasswordMsg
-                ];
-            }
-            if ($this->password !== $passwordTest) {
-                $this->errorEmailOrPasswordMsg = 'Wrong Email or Password';
-                $this->errors++;
-                $this->status = false;
-                $this->data['errorEmailOrPassword'] = [
-                    'status'    => true,
-                    'message'   => $this->errorEmailOrPasswordMsg
-                ];
-            }
+            try {
+                $userModel = new UserModel();
+                $userData = $userModel->where('user_email', $this->email)->first();
+                if (!$userData) {
+                    $this->errorEmailOrPasswordMsg = 'Wrong Email or Password';
+                    $this->errors++;
+                    $this->status = false;
+                    $this->data['errorEmailOrPassword'] = [
+                        'status'    => true,
+                        'message'   => $this->errorEmailOrPasswordMsg
+                    ];
+                } else {
+                    $checkUserPasswordMatch = AuthAPILibrary::checkPassword($this->password, $userData['user_password']);
 
-            if($this->errors === 0) {
-                $this->userIsLoginMsg = "Login successfully";
-                $this->status = true;
-                $this->data['userIsLogin'] = [
+                    if (!$checkUserPasswordMatch) {
+                        $this->status = false;
+                        $this->errorEmailOrPasswordMsg = 'Wrong Email or Password';
+                        $this->errors++;
+                        $this->data['errorEmailOrPassword'] = [
+                            'status'    => true,
+                            'message'   => $this->errorEmailOrPasswordMsg
+                        ];
+                    } else {
+                        $this->userIsLoginMsg = "Login successfully";
+                        $this->status = true;
+                        $this->data['userIsLogin'] = [
+                            'status'    => true,
+                            'message'   => $this->userIsLoginMsg,
+                            'redirectToDashboardUrl'   => base_url("dashboard")
+                        ];
+                    }
+                }
+            } catch (\Throwable $th) {
+                $this->status = false;
+                $this->errorEmailOrPasswordMsg = 'Something went wrong';
+                $this->errors++;
+                $this->data['errorEmailOrPassword'] = [
                     'status'    => true,
-                    'message'   => $this->userIsLoginMsg,
-                    'redirectToDashboardUrl'   => base_url("dashboard")
+                    'message'   => $this->errorEmailOrPasswordMsg
                 ];
             }
         }
