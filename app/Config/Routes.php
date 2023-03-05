@@ -36,15 +36,15 @@ $routes->set404Override('App\Controllers\PageController::error404');
  * --------------------------------------------------------------------
  */
 
-$routes->get('/', 'PageController::index');
+$routes->get('/', 'PageController::index', ["filter" => "noauth"]);
 
 $routes->group('auth', static function ($routes) {
-    $routes->get('login', 'PageController::login');
-    $routes->get('logout', 'PageController::logout');
-    $routes->get('register', 'PageController::register');
+    $routes->get('login', 'PageController::login', ["filter" => "noauth"]);
+    $routes->get('logout', 'PageController::logout', ["filter" => "auth"]);
+    $routes->get('register', 'PageController::register', ["filter" => "noauth"]);
     $routes->get('lock-page', 'PageController::lockPage');
-    $routes->get('forgot-password', 'PageController::forgotPassword');
-    $routes->get('reset-password', 'PageController::resetPassword');
+    $routes->get('forgot-password', 'PageController::forgotPassword', ["filter" => "noauth"]);
+    $routes->get('reset-password', 'PageController::resetPassword', ["filter" => "noauth"]);
 });
 
 $routes->get('dashboard','PageController::dashboard',["filter" => "auth"]);
