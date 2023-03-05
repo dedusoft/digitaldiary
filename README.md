@@ -1,4 +1,4 @@
-# Digital Diary App with CodeIgniter 4
+# digital diary web app made with PHP, CodeIgniter 4 JQuery, AJAX
 ## What is CodeIgniter?
 
 CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
