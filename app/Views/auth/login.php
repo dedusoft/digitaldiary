@@ -124,6 +124,14 @@
     const password = "#password";
     const remember = "#remember";
 
+    const toastRedirecting = Swal.mixin({
+        toast: true,
+        showConfirmButton: false,
+        position: 'top-end',
+        timer: 2500,
+        timerProgressBar: true,
+
+    });
 
     const handlerUserLogin = () => {
         $(formLogin).on('submit', (e) => {
@@ -131,7 +139,7 @@
             data = {
                 'email': $(email).val(),
                 'password': $(password).val(),
-                'remember': $(remember)[0].checked,
+                'remember': $(remember)[0].checked ? 'true' : 'false',
             };
             $.ajax({
                 url: API_URL,
@@ -143,23 +151,39 @@
                     $(btnLogin).attr('disabled', true);
                 },
                 success: function(response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        setTimeout(() => {
-                            location.href = '<?= base_url()?>dashboard';
-                        }, 1000);
+                    let responseStatus = response.status;
+                    let responseData = response.data;
+
+                    if (responseStatus === true) {
+                        toastr.remove();
+
+                        if (responseData.userIsLogin.status === true) {
+                            toastRedirecting.fire({
+                                icon: 'success',
+                                title: responseData.userIsLogin.message
+                            }).then(() => {
+                                window.location = responseData.userIsLogin.redirectToDashboardUrl;
+                            });
+                        }
+
                     }
-                    if (response.error) {
+                    if (responseStatus === false) {
+                        toastr.remove();
+
                         $(btnLogin).text('Login');
                         $(btnLogin).attr('disabled', false);
 
-                        if (response.errorEmail !== '') {
-                            toastr.error(response.errorEmail);
-
+                        if (responseData.errorEmail.status) {
+                            toastr.error(responseData.errorEmail.message);
                         }
 
-                        if (response.errorPassword !== '') {
-                            toastr.error(response.errorPassword);
+                        if (responseData.errorPassword.status) {
+                            toastr.error(responseData.errorPassword.message);
+                        }
+
+                        if (responseData.errorEmailOrPassword.status) {
+                            toastr.remove();
+                            toastr.error(responseData.errorEmailOrPassword.message);
                         }
                     }
                 }

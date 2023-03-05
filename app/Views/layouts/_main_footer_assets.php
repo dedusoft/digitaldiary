@@ -14,6 +14,5 @@
 <script src="<?= base_url(); ?>assets/venobox/venobox.min.js"></script>
 
 <!-- Main JS -->
-<script src="<?= base_url(); ?>api/config.js"></script>
 <script src="<?= base_url();?>js/index.js"></script>
 <script src="js/main.js" type="module"></script>

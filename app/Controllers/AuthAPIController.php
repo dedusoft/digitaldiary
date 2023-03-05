@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\AuthAPILibrary;
 use App\Models\UserModel;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
@@ -20,6 +21,8 @@ class AuthAPIController extends ResourceController
     public string $errorPasswordConfirmMsg = '';
     public string $errorPasswordMatchMsg = '';
     public string $errorTermsAndConditionsMsg = '';
+    public string $errorEmailOrPasswordMsg = '';
+    public string $userIsLoginMsg = '';
 
     public int $errors = 0;
     public bool $status;
@@ -31,7 +34,9 @@ class AuthAPIController extends ResourceController
         'allFieldsValidated'        => '',
         'errorPasswordMatch'        => '',
         'userInserted'              => '',
+        'userIsLogin'               => '',
         'errorUserEmailExist'       => '',
+        'errorEmailOrPassword'      => '',
     ];
 
     public function __construct()
@@ -49,10 +54,16 @@ class AuthAPIController extends ResourceController
 
         $emailInput = $this->request->getVar('email');
         $passwordInput = $this->request->getVar('password');
+        $rememberInput = $this->request->getVar('remember');
 
         if (empty($emailInput)) {
             $this->errorEmailMsg = 'Email is required';
             $this->errors++;
+            $this->status = false;
+            $this->data['errorEmail'] = [
+                'status'   => true,
+                'message'  => $this->errorEmailMsg
+            ];
         } else {
             $this->email = $emailInput;
         }
@@ -60,35 +71,58 @@ class AuthAPIController extends ResourceController
         if (empty($passwordInput)) {
             $this->errorPasswordMsg = 'Password is required';
             $this->errors++;
+            $this->status = false;
+            $this->data['errorPassword'] = [
+                'status'   => true,
+                'message'   => $this->errorPasswordMsg
+            ];
         } else {
             $this->password = $passwordInput;
         }
-
+        // all fields are filled
         if ($this->errors == 0) {
+
             if ($this->email !== $emailTest) {
-                $this->errorPasswordMsg = 'Wrong Email or Password';
+                $this->status = false;
+                $this->errorEmailOrPasswordMsg = 'Wrong Email or Password';
                 $this->errors++;
+                $this->data['errorEmailOrPassword'] = [
+                    'status'    => true,
+                    'message'   => $this->errorEmailOrPasswordMsg
+                ];
             }
             if ($this->password !== $passwordTest) {
-                $this->errorPasswordMsg = 'Wrong Email or Password';
+                $this->errorEmailOrPasswordMsg = 'Wrong Email or Password';
                 $this->errors++;
+                $this->status = false;
+                $this->data['errorEmailOrPassword'] = [
+                    'status'    => true,
+                    'message'   => $this->errorEmailOrPasswordMsg
+                ];
+            }
+
+            if($this->errors === 0) {
+                $this->userIsLoginMsg = "Login successfully";
+                $this->status = true;
+                $this->data['userIsLogin'] = [
+                    'status'    => true,
+                    'message'   => $this->userIsLoginMsg,
+                    'redirectToDashboardUrl'   => base_url("dashboard")
+                ];
             }
         }
 
-        if ($this->errors > 0) {
-            $output = array(
-                'error'   => true,
-                'errorEmail' => $this->errorEmailMsg,
-                'errorPassword'  => $this->errorPasswordMsg
-            );
-        }
+        $output = array(
+            'status'    => $this->status,
+            'data'      => [
+                'errorEmail'                 => $this->data['errorEmail'],
+                'errorPassword'              => $this->data['errorPassword'],
+                'errorEmailOrPassword'       => $this->data['errorEmailOrPassword'],
+                'userIsLogin'                => $this->data['userIsLogin'],
+            ],
+        );
 
-        if ($this->errors == 0) {
-            $output = array(
-                'success'   => true,
-                'message'   => 'Login successfully'
-            );
-        }
+
         return $this->respond($output, 200);
     }
 
@@ -174,20 +208,20 @@ class AuthAPIController extends ResourceController
 
                 $userData = [
                     'user_email'    => $this->email,
-                    'user_password' => password_hash($this->password, PASSWORD_DEFAULT),
+                    'user_password' => AuthAPILibrary::hashPassword($this->password),
                     'user_role'     =>  $this->userRole
                 ];
                 try {
                     $userModel = new UserModel();
                     // check if email exist
                     $userEmailExist = $userModel->where('user_email', $this->email)->first();
-                    if($userEmailExist) {
+                    if ($userEmailExist) {
                         $this->status = false;
                         $this->data['errorUserEmailExist'] = [
                             'status'    => true,
                             'message'   => 'Email already exist '
                         ];
-                    }else {
+                    } else {
                         $query = $userModel->insert($userData);
                         if (!$query) {
                             $this->status = false;
@@ -204,7 +238,6 @@ class AuthAPIController extends ResourceController
                             ];
                         }
                     }
-                    
                 } catch (\Throwable $th) {
                     $this->status = false;
                     $this->data['userInserted'] = [

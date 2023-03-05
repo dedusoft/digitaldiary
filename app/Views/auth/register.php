@@ -149,6 +149,7 @@
         timerProgressBar: true,
 
     });
+    
     const toastRetryRegistration = Swal.mixin({
         toast: true,
         showConfirmButton: false,
