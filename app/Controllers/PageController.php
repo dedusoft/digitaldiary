@@ -75,6 +75,14 @@ class PageController extends BaseController
         ];
         echo view('auth/lock-page', $data);
     }
+    public function logout()
+    {
+        if (session()->has('logUserId')) {
+            session()->remove('logUserId');
+            return redirect()->to(base_url());
+        }
+        return redirect()->to(base_url());
+    }
 
 
     /*

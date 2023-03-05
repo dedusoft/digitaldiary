@@ -21,7 +21,7 @@
                    
                     <li class="mx-2">
                         <a class="btn-sm btn-outline-secondary" href="#">
-                        ( <?= $user['user_email'] ?> )
+                         <?= isset($user['user_email']) ? $user['user_email']: ''  ?>
                         </a>
                     </li>
                     <li class="mx-2">
@@ -30,7 +30,7 @@
                         </a>
                     </li>
                     <li class="mx-2">
-                        <a class="btn-sm btn-primary" href="auth/login">
+                        <a class="btn-sm btn-primary" href="auth/logout">
                             Logout
                         </a>
                     </li>

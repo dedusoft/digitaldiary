@@ -27,7 +27,7 @@
                         <h1 class="mb-0 h3">Sign in to our platform</h1>
                     </div>
                     <!-- action="<?= base_url() ?>dashboard" -->
-                    <form id="formLogin" method="POST" class="mt-4">
+                    <form id="formLogin" method="POST" class="mt-4" autocomplete="off">
                         <!-- Form -->
                         <div class="form-group mb-4">
                             <label for="email">Your Email</label>
