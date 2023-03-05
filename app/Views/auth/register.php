@@ -114,6 +114,8 @@
 <?= $this->section('scripts') ?>
 <script>
     $(document).ready(function() {
+
+
         handlerUserRegistration();
 
     });
@@ -126,6 +128,29 @@
     const password = "#password";
     const passwordConfirm = "#passwordConfirm";
     const termsAndConditions = "#termsAndConditions";
+
+    const Toast = Swal.mixin({
+
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+
+    const toastRedirecting = Swal.mixin({
+        toast: true,
+        showConfirmButton: false,
+        position: 'top-end',
+        timer: 5000,
+        timerProgressBar: true,
+        // didOpen: (toast) => {
+        //     toast.addEventListener('mouseenter', Swal.stopTimer);
+        //     toast.addEventListener('mouseleave', Swal.resumeTimer);
+        // }
+    });
 
 
     const handlerUserRegistration = () => {
@@ -155,14 +180,32 @@
 
                         if (responseStatus === true) {
                             toastr.remove();
-                            if (responseData.allFieldsValidated.status) {
-                                toastr.success(responseData.allFieldsValidated.message);
+                            // if (responseData.allFieldsValidated.status) {
+                            //     toastr.success(responseData.allFieldsValidated.message);
+                            // }
+                            if (responseData.userInserted.status === true) {
+
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: responseData.userInserted.message
+                                });
+                                setTimeout(() => {
+                                    toastRedirecting.fire({
+                                        icon: 'info',
+                                        title: 'Redirecting to Sign in page...'
+                                    });
+                                    setTimeout(() => {
+                                        window.location = '<?= base_url(); ?>auth/login';
+                                    }, 5000);
+                                }, 3000);
+
                             }
                         }
-                        if(responseStatus === false) {
+                        if (responseStatus === false) {
                             $(btnRegister).text('Sign Up');
                             $(btnRegister).attr('disabled', false);
-                            
+
                             if (responseData.errorEmail.status) {
                                 toastr.error(responseData.errorEmail.message);
                             }
@@ -180,6 +223,9 @@
                             }
                             if (responseData.errorPasswordMatch.status) {
                                 toastr.error(responseData.errorPasswordMatch.message);
+                            }
+                            if (responseData.userInserted.status === false) {
+                                toastr.success(responseData.userInserted.message);
                             }
                             if (responseData.allFieldsValidated.status === false) {
                                 toastr.remove();

@@ -30,6 +30,7 @@ class AuthAPIController extends ResourceController
         'errorTermsAndConditions'   => '',
         'allFieldsValidated'        => '',
         'errorPasswordMatch'        => '',
+        'userInserted'              => '',
     ];
 
     use ResponseTrait;
@@ -164,12 +165,37 @@ class AuthAPIController extends ResourceController
                 ];
             }
             if($this->errors === 0) {
-                $this->status = true;
-                $this->data['allFieldsValidated'] = [
-                    'status'    => true,
-                    'message'  => 'All validation are successful'
-    
+
+                // Test the insertion
+                $userData = [
+                    'user_email'    => $this->email,
+                    'user_password' => password_hash($this->password, PASSWORD_DEFAULT),
+                    'user_role'     =>  $this->userRole
                 ];
+                try {
+                    $userModel = new UserModel();
+                    $userModel->insert($userData);
+
+                    $this->status = true;
+                    $this->data['userInserted'] = [
+                        'status'    => true,
+                        'message'   => 'Account created successfully'
+                    ];
+
+                } catch (\Throwable $th) {
+                    $this->status = false;
+                    $this->data['userInserted'] = [
+                        'status'    => false,
+                        'message'   => 'An error occured during registration: ' . $th 
+                    ];
+                }
+
+                // $this->status = true;
+                // $this->data['allFieldsValidated'] = [
+                //     'status'    => true,
+                //     'message'  => 'All validation are successful'
+    
+                // ];
             }
            
         }
@@ -183,6 +209,7 @@ class AuthAPIController extends ResourceController
                 'errorTermsAndConditions'   => $this->data['errorTermsAndConditions'],
                 'allFieldsValidated'        => $this->data['allFieldsValidated'],
                 'errorPasswordMatch'        => $this->data['errorPasswordMatch'],
+                'userInserted'              => $this->data['userInserted'],
             ]
         ];
 
