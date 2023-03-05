@@ -158,14 +158,6 @@
 
     });
 
-    const toastAccountExist = Swal.mixin({
-        toast: true,
-        showConfirmButton: false,
-        position: 'top-end',
-        timer: 3000,
-        timerProgressBar: true,
-
-    });
 
 
     const handlerUserRegistration = () => {
@@ -256,6 +248,11 @@
                             if (responseData.allFieldsValidated.status === false) {
                                 toastr.remove();
                                 toastr.error(responseData.allFieldsValidated.message);
+                            }
+
+                            if (responseData.errorUserEmailExist.status) {
+                                toastr.remove();
+                                toastr.error(responseData.errorUserEmailExist.message);
                             }
 
                         }

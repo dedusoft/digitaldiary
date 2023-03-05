@@ -31,6 +31,7 @@ class AuthAPIController extends ResourceController
         'allFieldsValidated'        => '',
         'errorPasswordMatch'        => '',
         'userInserted'              => '',
+        'errorUserEmailExist'       => '',
     ];
 
     public function __construct()
@@ -179,28 +180,36 @@ class AuthAPIController extends ResourceController
                 try {
                     $userModel = new UserModel();
                     // check if email exist
-
-
-                    $query = $userModel->insert($userData);
-                    if (!$query) {
+                    $userEmailExist = $userModel->where('user_email', $this->email)->first();
+                    if($userEmailExist) {
                         $this->status = false;
-                        $this->data['userInserted'] = [
-                            'status'    => false,
-                            'message'   => 'Something went wrong '
-                        ];
-                    } else {
-                        $this->status = true;
-                        $this->data['userInserted'] = [
+                        $this->data['errorUserEmailExist'] = [
                             'status'    => true,
-                            'message'   => 'Account successfully created',
-                            'redirectToLoginUrl'   => base_url('auth/login')
+                            'message'   => 'Email already exist '
                         ];
+                    }else {
+                        $query = $userModel->insert($userData);
+                        if (!$query) {
+                            $this->status = false;
+                            $this->data['userInserted'] = [
+                                'status'    => false,
+                                'message'   => 'Something went wrong '
+                            ];
+                        } else {
+                            $this->status = true;
+                            $this->data['userInserted'] = [
+                                'status'    => true,
+                                'message'   => 'Account successfully created',
+                                'redirectToLoginUrl'   => base_url('auth/login')
+                            ];
+                        }
                     }
+                    
                 } catch (\Throwable $th) {
                     $this->status = false;
                     $this->data['userInserted'] = [
                         'status'    => false,
-                        'message'   => "Error: could't create account"
+                        'message'   => "Error: Something went wrong"
                     ];
                 }
             }
@@ -216,23 +225,28 @@ class AuthAPIController extends ResourceController
                 'allFieldsValidated'        => $this->data['allFieldsValidated'],
                 'errorPasswordMatch'        => $this->data['errorPasswordMatch'],
                 'userInserted'              => $this->data['userInserted'],
+                'errorUserEmailExist'       => $this->data['errorUserEmailExist'],
             ]
         ];
 
         return $this->respond($output, 200);
     }
 
+    // TODO: Need professional google gmail account to send mail,
+    // now mail function can't work
     use ResponseTrait;
     public function forgetPassword()
     {
         echo view('auth/forget-password');
     }
 
+    // TODO: depends on forgetPassword functionality
     public function resetPassword()
     {
         echo view('auth/forget-password');
     }
 
+    use ResponseTrait;
     public function lockPage()
     {
         echo view('auth/forget-password');
