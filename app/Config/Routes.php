@@ -47,7 +47,7 @@ $routes->group('auth', static function ($routes) {
     $routes->get('reset-password', 'PageController::resetPassword');
 });
 
-$routes->get('dashboard', 'PageController::dashboard');
+$routes->get('dashboard','PageController::dashboard',["filter" => "auth"]);
 
 
 
