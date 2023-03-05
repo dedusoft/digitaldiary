@@ -24,11 +24,11 @@
                          <?= isset($user['user_email']) ? $user['user_email']: ''  ?>
                         </a>
                     </li>
-                    <li class="mx-2">
+                    <!-- <li class="mx-2">
                         <a class="btn-sm btn-secondary" href="auth/lock-page">
                             Lock screen
                         </a>
-                    </li>
+                    </li> -->
                     <li class="mx-2">
                         <a class="btn-sm btn-primary" href="auth/logout">
                             Logout
