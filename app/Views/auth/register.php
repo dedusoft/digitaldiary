@@ -23,7 +23,7 @@
                         <h1 class="mb-0 h3">Create Account </h1>
                     </div>
                     <form id="formRegistration" method="post" class="mt-4">
-                        <?= csrf_field()?>
+                        <?= csrf_field() ?>
                         <!-- Form -->
                         <div class="form-group mb-4">
                             <label for="email">Your Email</label>
@@ -150,14 +150,41 @@
                 success: function(response) {
 
                     if (response.success) {
-                        toastr.info(response.message);
+                        toastr.info(response.message.allFieldsValidated);
 
                     }
                     if (response.error) {
                         $(btnRegister).text('Sign Up');
                         $(btnRegister).attr('disabled', false);
-                        toastr.error(response.message);
+
+                        if (response.message.allFieldRequired != null) {
+                            toastr.error(response.message.allFieldRequired);
+                        }
+
+                        if (response.message.errorEmail != null) {
+
+                            toastr.error(response.message.errorEmail);
+                        }
+                        if (response.message.errorPassword != null) {
+
+                            toastr.error(response.message.errorPassword);
+                        }
+                        if (response.message.errorPasswordConfirm != null) {
+
+                            toastr.error(response.message.errorPasswordConfirm);
+                        }
+                        if (response.message.errorTermsAndConditions != null) {
+
+                            toastr.error(response.message.errorTermsAndConditions);
+                        }
+                        if (response.message.errorPasswordMatch) {
+                            toastr.error(response.message.errorPasswordMatch);
+                        }
+                    } else {
+                        toastr.error("Something went wrong please check your connection");
                     }
+
+
                 }
             });
 

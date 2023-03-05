@@ -64,18 +64,15 @@ class AuthAPIController extends ResourceController
                 'errorEmail' => $this->errorEmail,
                 'errorPassword'  => $this->errorPassword
             );
-
         }
 
-        if($this->errors == 0) {
+        if ($this->errors == 0) {
             $output = array(
                 'success'   => true,
                 'message'   => 'Login successfully'
             );
-
         }
         return $this->respond($output, 200);
-
     }
 
     use ResponseTrait;
@@ -85,6 +82,7 @@ class AuthAPIController extends ResourceController
         $passwordInput = $this->request->getVar('password');
         $passwordConfirmInput = $this->request->getVar('passwordConfirm');
         $termsAndConditionsInput = $this->request->getVar('termsAndConditions');
+        $output = [];
 
         if (empty($emailInput)) {
             $this->errorEmail = 'Email is required';
@@ -114,26 +112,46 @@ class AuthAPIController extends ResourceController
             $this->termsAndConditions = $termsAndConditionsInput;
         }
 
-        if($this->errors != 0) {
+        if ($passwordInput != $passwordConfirmInput) {
+            $this->errorPasswordMatch = 'Password does not match';
+            $this->errors++;
+        } else {
+            $this->errorPasswordMatch = '';
+        }
+
+        if ($this->errors != 0) {
+            if ($this->errors >= 4) {
+                $output = array(
+                    'error'   => true,
+                    'message'   => [
+                        'allFieldRequired' =>   'All fields are required'
+                    ],
+                );
+            } elseif ($this->errors > 0) {
+                $output = array(
+                    'error'   => true,
+                    'message'   => [
+                        'errorEmail' => $this->errorEmail,
+                        'errorPassword'  => $this->errorPassword,
+                        'errorPasswordConfirm'  => $this->errorPasswordConfirm,
+                        'errorTermsAndConditions'  => $this->errorTermsAndConditions,
+                        'errorPasswordMatch'  => $this->errorPasswordMatch
+
+                    ]
+                );
+            }
+        }
+
+        if ($this->errors == 0) {
+
             $output = array(
-                'error'   => true,
-                'message'   => 'All fields are required',
-                'errorEmail' => $this->errorEmail,
-                'errorPassword'  => $this->errorPassword,
-                'errorPasswordConfirm'  => $this->errorPasswordConfirm,
-                'errorTermsAndConditions'  => $this->errorTermsAndConditions,
-                'termAndCondition' => $this->termsAndConditions
+                'success'   => true,
+                'message'   => [
+                    'allFieldsValidated'    => 'All validation are successful'
+                ]
             );
         }
 
-        if($this->errors == 0) {
-            $output = array(
-                'success'   => true,
-                'message'   => "All validation are successful"
-            );
-            
-        }
-        
         return $this->respond($output, 200);
     }
 
