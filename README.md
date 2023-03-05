@@ -27,7 +27,7 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
 
 
-## Installation
+## Installation Procedure
 
 1 - Clone this project locally using the commmand
 
@@ -45,12 +45,19 @@ composer update
 composer install 
 ```
 
-6 - Create your own branch to 'branch-name' using the command:
+4 - Create your own branch to 'branch-name' using the command:
 
 ```bash
 git checkout -b [branch-name]
 ```
 
+5 - Open your phpMyAdmin in XAMPP, WAMPP or MAMP and and create a db named `digitaldiary_db` , make sure your user is `root` and his password is  `root` by creating this user and granting all permission or else you can change the user in the `.env` file of the project.
+
+6 - Go back to your IDE open the project  and type the command below to apply migrate the migrations
+
+```php
+php spark migrate
+```
 
 7 - Finally launch the application using the command
 
