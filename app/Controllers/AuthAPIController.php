@@ -15,12 +15,22 @@ class AuthAPIController extends ResourceController
     public string $passwordConfirm = '';
     public string $termsAndConditions = '';
 
-    public string $errorEmail = '';
-    public string $errorPassword = '';
-    public string $errorPasswordConfirm = '';
-    public string $errorPasswordMatch = '';
-    public string $errorTermsAndConditions = '';
+    public string $errorEmailMsg = '';
+    public string $errorPasswordMsg = '';
+    public string $errorPasswordConfirmMsg = '';
+    public string $errorPasswordMatchMsg = '';
+    public string $errorTermsAndConditionsMsg = '';
+
     public int $errors = 0;
+    public bool $status;
+    public array $data = [
+        'errorEmail'                => '',
+        'errorPassword'             => '',
+        'errorPasswordConfirm'      => '',
+        'errorTermsAndConditions'   => '',
+        'allFieldsValidated'        => '',
+        'errorPasswordMatch'        => '',
+    ];
 
     use ResponseTrait;
     public function login()
@@ -34,14 +44,14 @@ class AuthAPIController extends ResourceController
         $passwordInput = $this->request->getVar('password');
 
         if (empty($emailInput)) {
-            $this->errorEmail = 'Email is required';
+            $this->errorEmailMsg = 'Email is required';
             $this->errors++;
         } else {
             $this->email = $emailInput;
         }
 
         if (empty($passwordInput)) {
-            $this->errorPassword = 'Password is required';
+            $this->errorPasswordMsg = 'Password is required';
             $this->errors++;
         } else {
             $this->password = $passwordInput;
@@ -49,11 +59,11 @@ class AuthAPIController extends ResourceController
 
         if ($this->errors == 0) {
             if ($this->email !== $emailTest) {
-                $this->errorPassword = 'Wrong Email or Password';
+                $this->errorPasswordMsg = 'Wrong Email or Password';
                 $this->errors++;
             }
             if ($this->password !== $passwordTest) {
-                $this->errorPassword = 'Wrong Email or Password';
+                $this->errorPasswordMsg = 'Wrong Email or Password';
                 $this->errors++;
             }
         }
@@ -61,8 +71,8 @@ class AuthAPIController extends ResourceController
         if ($this->errors > 0) {
             $output = array(
                 'error'   => true,
-                'errorEmail' => $this->errorEmail,
-                'errorPassword'  => $this->errorPassword
+                'errorEmail' => $this->errorEmailMsg,
+                'errorPassword'  => $this->errorPasswordMsg
             );
         }
 
@@ -82,75 +92,99 @@ class AuthAPIController extends ResourceController
         $passwordInput = $this->request->getVar('password');
         $passwordConfirmInput = $this->request->getVar('passwordConfirm');
         $termsAndConditionsInput = $this->request->getVar('termsAndConditions');
-        $output = [];
 
         if (empty($emailInput)) {
-            $this->errorEmail = 'Email is required';
+            $this->errorEmailMsg = 'Email is required';
             $this->errors++;
+            $this->status = false;
+            $this->data['errorEmail'] = [
+                'status'   => true,
+                'message'  => $this->errorEmailMsg
+            ];
         } else {
             $this->email = $emailInput;
         }
 
         if (empty($passwordInput)) {
-            $this->errorPassword = 'Password is required';
+            $this->errorPasswordMsg = 'Password is required';
             $this->errors++;
+            $this->status = false;
+            $this->data['errorPassword'] = [
+                'status'   => true,
+                'message'   => $this->errorPasswordMsg
+            ];
         } else {
             $this->password = $passwordInput;
         }
 
         if (empty($passwordConfirmInput)) {
-            $this->errorPasswordConfirm = 'Confirm Password is required';
+            $this->errorPasswordConfirmMsg = 'Confirm Password is required';
             $this->errors++;
+            $this->status = false;
+            $this->data['errorPasswordConfirm'] = [
+                'status'   => true,
+                'message'   => $this->errorPasswordConfirmMsg
+            ];
         } else {
             $this->passwordConfirm = $passwordInput;
         }
 
         if ($termsAndConditionsInput === 'false') {
-            $this->errorTermsAndConditions = 'Terms and Conditions  is required';
+            $this->errorTermsAndConditionsMsg = 'Terms and Conditions  is required';
             $this->errors++;
+            $this->status = false;
+            $this->data['errorTermsAndConditions'] = [
+                'status'   => true,
+                'message'  => $this->errorTermsAndConditionsMsg
+            ];
         } else {
             $this->termsAndConditions = $termsAndConditionsInput;
         }
 
-        if ($passwordInput != $passwordConfirmInput) {
-            $this->errorPasswordMatch = 'Password does not match';
-            $this->errors++;
-        } else {
-            $this->errorPasswordMatch = '';
+        // all fields are empty
+        if ($this->errors === 4) {
+
+            $this->status = false;
+            $this->data['allFieldsValidated']  = [
+                'status'    => false,
+                'message'   => 'All fields are required'
+            ];
         }
 
-        if ($this->errors != 0) {
-            if ($this->errors >= 4) {
-                $output = array(
-                    'error'   => true,
-                    'message'   => [
-                        'allFieldRequired' =>   'All fields are required'
-                    ],
-                );
-            } elseif ($this->errors > 0) {
-                $output = array(
-                    'error'   => true,
-                    'message'   => [
-                        'errorEmail' => $this->errorEmail,
-                        'errorPassword'  => $this->errorPassword,
-                        'errorPasswordConfirm'  => $this->errorPasswordConfirm,
-                        'errorTermsAndConditions'  => $this->errorTermsAndConditions,
-                        'errorPasswordMatch'  => $this->errorPasswordMatch
-
-                    ]
-                );
+        // all fields are filled
+        if ($this->errors === 0) {
+            // check password === passwordConfirm
+            if ($passwordInput !== $passwordConfirmInput) {
+                $this->errorPasswordMatchMsg = 'Password does not match';
+                $this->errors++;
+                $this->status = false;
+                $this->data['errorPasswordMatch'] = [
+                    'status'   => true,
+                    'message'   => $this->errorPasswordMatchMsg
+                ];
             }
+            if($this->errors === 0) {
+                $this->status = true;
+                $this->data['allFieldsValidated'] = [
+                    'status'    => true,
+                    'message'  => 'All validation are successful'
+    
+                ];
+            }
+           
         }
 
-        if ($this->errors == 0) {
-
-            $output = array(
-                'success'   => true,
-                'message'   => [
-                    'allFieldsValidated'    => 'All validation are successful'
-                ]
-            );
-        }
+        $output = [
+            'status' => $this->status,
+            'data'  => [
+                'errorEmail'                => $this->data['errorEmail'],
+                'errorPassword'             => $this->data['errorPassword'],
+                'errorPasswordConfirm'      => $this->data['errorPasswordConfirm'],
+                'errorTermsAndConditions'   => $this->data['errorTermsAndConditions'],
+                'allFieldsValidated'        => $this->data['allFieldsValidated'],
+                'errorPasswordMatch'        => $this->data['errorPasswordMatch'],
+            ]
+        ];
 
         return $this->respond($output, 200);
     }

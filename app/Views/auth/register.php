@@ -132,61 +132,71 @@
         $(formRegistration).on('submit', (e) => {
             e.preventDefault();
             let termsAndConditionsInput = $(termsAndConditions)[0].checked ? 'true' : 'false'
-            data = {
+            let data = {
                 'email': $(email).val(),
                 'password': $(password).val(),
                 'passwordConfirm': $(passwordConfirm).val(),
                 'termsAndConditions': termsAndConditionsInput,
             };
-            $.ajax({
-                url: API_URL,
-                type: "post",
-                data: data,
-                dataType: "json",
-                beforeSend: function() {
-                    $(btnRegister).text('Validating ...');
-                    $(btnRegister).attr('disabled', true);
-                },
-                success: function(response) {
+            try {
+                $.ajax({
+                    url: API_URL,
+                    type: "post",
+                    data: data,
+                    dataType: "json",
+                    beforeSend: function() {
+                        $(btnRegister).text('Validating ...');
+                        $(btnRegister).attr('disabled', true);
+                    },
+                    success: function(response) {
+                        toastr.remove();
+                        let responseStatus = response.status;
+                        let responseData = response.data;
 
-                    if (response.success) {
-                        toastr.info(response.message.allFieldsValidated);
+                        if (responseStatus === true) {
+                            toastr.remove();
+                            if (responseData.allFieldsValidated.status) {
+                                toastr.success(responseData.allFieldsValidated.message);
+                            }
+                        }
+                        if(responseStatus === false) {
+                            $(btnRegister).text('Sign Up');
+                            $(btnRegister).attr('disabled', false);
+                            
+                            if (responseData.errorEmail.status) {
+                                toastr.error(responseData.errorEmail.message);
+                            }
+                            if (responseData.errorPassword.status) {
 
-                    }
-                    if (response.error) {
-                        $(btnRegister).text('Sign Up');
-                        $(btnRegister).attr('disabled', false);
+                                toastr.error(responseData.errorPassword.message);
+                            }
+                            if (responseData.errorPasswordConfirm.status) {
 
-                        if (response.message.allFieldRequired != null) {
-                            toastr.error(response.message.allFieldRequired);
+                                toastr.error(responseData.errorPasswordConfirm.message);
+                            }
+                            if (responseData.errorTermsAndConditions.status) {
+
+                                toastr.error(responseData.errorTermsAndConditions.message);
+                            }
+                            if (responseData.errorPasswordMatch.status) {
+                                toastr.error(responseData.errorPasswordMatch.message);
+                            }
+                            if (responseData.allFieldsValidated.status === false) {
+                                toastr.remove();
+                                toastr.error(responseData.allFieldsValidated.message);
+                            }
+
                         }
 
-                        if (response.message.errorEmail != null) {
+                    },
 
-                            toastr.error(response.message.errorEmail);
-                        }
-                        if (response.message.errorPassword != null) {
+                });
+            } catch (error) {
+                toastr.error("Something went wrong " + error);
 
-                            toastr.error(response.message.errorPassword);
-                        }
-                        if (response.message.errorPasswordConfirm != null) {
-
-                            toastr.error(response.message.errorPasswordConfirm);
-                        }
-                        if (response.message.errorTermsAndConditions != null) {
-
-                            toastr.error(response.message.errorTermsAndConditions);
-                        }
-                        if (response.message.errorPasswordMatch) {
-                            toastr.error(response.message.errorPasswordMatch);
-                        }
-                    } else {
-                        toastr.error("Something went wrong please check your connection");
-                    }
+            }
 
 
-                }
-            });
 
         });
     }
