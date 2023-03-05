@@ -128,8 +128,9 @@
     const password = "#password";
     const passwordConfirm = "#passwordConfirm";
     const termsAndConditions = "#termsAndConditions";
+    let retryTimes = 0;
 
-    const Toast = Swal.mixin({
+    const toastAccountCreated = Swal.mixin({
 
         showConfirmButton: false,
         timer: 3000,
@@ -144,12 +145,26 @@
         toast: true,
         showConfirmButton: false,
         position: 'top-end',
-        timer: 5000,
+        timer: 3000,
         timerProgressBar: true,
-        // didOpen: (toast) => {
-        //     toast.addEventListener('mouseenter', Swal.stopTimer);
-        //     toast.addEventListener('mouseleave', Swal.resumeTimer);
-        // }
+
+    });
+    const toastRetryRegistration = Swal.mixin({
+        toast: true,
+        showConfirmButton: false,
+        position: 'top-end',
+        timer: 3000,
+        timerProgressBar: true,
+
+    });
+
+    const toastAccountExist = Swal.mixin({
+        toast: true,
+        showConfirmButton: false,
+        position: 'top-end',
+        timer: 3000,
+        timerProgressBar: true,
+
     });
 
 
@@ -180,26 +195,19 @@
 
                         if (responseStatus === true) {
                             toastr.remove();
-                            // if (responseData.allFieldsValidated.status) {
-                            //     toastr.success(responseData.allFieldsValidated.message);
-                            // }
+
                             if (responseData.userInserted.status === true) {
-
-
-                                Toast.fire({
+                                toastAccountCreated.fire({
                                     icon: 'success',
                                     title: responseData.userInserted.message
-                                });
-                                setTimeout(() => {
+                                }).then(() => {
                                     toastRedirecting.fire({
                                         icon: 'info',
                                         title: 'Redirecting to Sign in page...'
+                                    }).then(() => {
+                                        window.location = responseData.userInserted.redirectToLoginUrl;
                                     });
-                                    setTimeout(() => {
-                                        window.location = '<?= base_url(); ?>auth/login';
-                                    }, 5000);
-                                }, 3000);
-
+                                });
                             }
                         }
                         if (responseStatus === false) {
@@ -225,7 +233,25 @@
                                 toastr.error(responseData.errorPasswordMatch.message);
                             }
                             if (responseData.userInserted.status === false) {
-                                toastr.success(responseData.userInserted.message);
+                                toastRetryRegistration.fire({
+                                    icon: 'error',
+                                    title: responseData.userInserted.message
+                                }).then(() => {
+                                    toastRetryRegistration.fire({
+                                        icon: 'info',
+                                        title: `${retryTimes+1} attempted , resubmiting ...`
+                                    }).then(() => {
+                                        if (retryTimes < 3) {
+                                            $(btnRegister).click();
+                                        }
+                                        if (retryTimes === 3) {
+                                            toastr.info("We counldn't connect please try later");
+                                        }
+                                    });
+
+                                    retryTimes++;
+                                })
+
                             }
                             if (responseData.allFieldsValidated.status === false) {
                                 toastr.remove();

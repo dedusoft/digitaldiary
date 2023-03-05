@@ -33,6 +33,11 @@ class AuthAPIController extends ResourceController
         'userInserted'              => '',
     ];
 
+    public function __construct()
+    {
+        helper(['url']);
+    }
+
     use ResponseTrait;
     public function login()
     {
@@ -164,9 +169,8 @@ class AuthAPIController extends ResourceController
                     'message'   => $this->errorPasswordMatchMsg
                 ];
             }
-            if($this->errors === 0) {
+            if ($this->errors === 0) {
 
-                // Test the insertion
                 $userData = [
                     'user_email'    => $this->email,
                     'user_password' => password_hash($this->password, PASSWORD_DEFAULT),
@@ -174,30 +178,32 @@ class AuthAPIController extends ResourceController
                 ];
                 try {
                     $userModel = new UserModel();
-                    $userModel->insert($userData);
+                    // check if email exist
 
-                    $this->status = true;
-                    $this->data['userInserted'] = [
-                        'status'    => true,
-                        'message'   => 'Account created successfully'
-                    ];
 
+                    $query = $userModel->insert($userData);
+                    if (!$query) {
+                        $this->status = false;
+                        $this->data['userInserted'] = [
+                            'status'    => false,
+                            'message'   => 'Something went wrong '
+                        ];
+                    } else {
+                        $this->status = true;
+                        $this->data['userInserted'] = [
+                            'status'    => true,
+                            'message'   => 'Account successfully created',
+                            'redirectToLoginUrl'   => base_url('auth/login')
+                        ];
+                    }
                 } catch (\Throwable $th) {
                     $this->status = false;
                     $this->data['userInserted'] = [
                         'status'    => false,
-                        'message'   => 'An error occured during registration: ' . $th 
+                        'message'   => "Error: could't create account"
                     ];
                 }
-
-                // $this->status = true;
-                // $this->data['allFieldsValidated'] = [
-                //     'status'    => true,
-                //     'message'  => 'All validation are successful'
-    
-                // ];
             }
-           
         }
 
         $output = [
