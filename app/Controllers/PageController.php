@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\UserModel;
 
 class PageController extends BaseController
 {
@@ -16,6 +17,7 @@ class PageController extends BaseController
     /* display the landing page */
     public function index()
     {
+
         return view('index');
     }
 
@@ -83,7 +85,15 @@ class PageController extends BaseController
     /* display the dashboard landing page page */
     public function dashboard()
     {
-        echo view('dashboard');
+        $userModel = new UserModel();
+        $logUserId = session()->get('logUserId');
+
+        $userData = $userModel->find($logUserId);
+
+        $data = [
+            'user'  => $userData
+        ];
+        echo view('dashboard', $data);
     }
 
 

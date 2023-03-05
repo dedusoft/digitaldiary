@@ -6,12 +6,13 @@
 <?= $this->endSection()  ?>
 
 <?= $this->section('content') ?>
+
 <div class="notes" id="app">
-<?= $this->endSection() ?>
+    <?= $this->endSection() ?>
 
 
-<?= $this->section('scripts') ?>
-<script>
+    <?= $this->section('scripts') ?>
+    <script>
 
-</script>
-<?= $this->endSection()  ?>
+    </script>
+    <?= $this->endSection()  ?>

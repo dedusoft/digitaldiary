@@ -18,10 +18,26 @@
                 <?php endif ?>
 
                 <?php if (url_is('dashboard')) : ?>
-                    <li class="mx-2"><a class="btn-sm btn-primary" href="auth/login">Sign Out</a></li>
-                <?php endif ?>
+                   
+                    <li class="mx-2">
+                        <a class="btn-sm btn-outline-secondary" href="#">
+                        ( <?= $user['user_email'] ?> )
+                        </a>
+                    </li>
+                    <li class="mx-2">
+                        <a class="btn-sm btn-secondary" href="auth/lock-page">
+                            Lock screen
+                        </a>
+                    </li>
+                    <li class="mx-2">
+                        <a class="btn-sm btn-primary" href="auth/login">
+                            Logout
+                        </a>
+                    </li>
+                   
+                    
 
-
+                <?php endif; ?>
             </ul>
         </nav>
 

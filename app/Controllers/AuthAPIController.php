@@ -105,6 +105,15 @@ class AuthAPIController extends ResourceController
                             'message'   => $this->errorEmailOrPasswordMsg
                         ];
                     } else {
+                         // set session variable if user check remeber me
+                         if($rememberInput === 'true') {
+                            $userId = $userData['id'];
+                            session()->set('logUserId',$userId);
+                         } else {
+                            $userId = $userData['id'];
+                            session()->set('logUserId',$userId);
+                         }     
+
                         $this->userIsLoginMsg = "Login successfully";
                         $this->status = true;
                         $this->data['userIsLogin'] = [
@@ -243,6 +252,7 @@ class AuthAPIController extends ResourceController
                                 'message'   => 'Something went wrong '
                             ];
                         } else {
+                           
                             $this->status = true;
                             $this->data['userInserted'] = [
                                 'status'    => true,
@@ -296,5 +306,10 @@ class AuthAPIController extends ResourceController
     public function lockPage()
     {
         echo view('auth/forget-password');
+    }
+
+    public function setSession($userData)
+    {
+
     }
 }
