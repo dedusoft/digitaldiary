@@ -32,7 +32,7 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 1 - Clone this project locally using the commmand
 
 ```git
-git clone https://github.com/duclairdeugoue/digitaldiary-ci4-app.git 
+git clone https://github.com/duclairdeugoue/digitaldiary.git 
 ```
 
 2 - Enter inside the project folder and create an empty folder named `cache` inside the folder writable if not exist
